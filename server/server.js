@@ -10,11 +10,13 @@ io.on('connection', socket => {
     socket.emit('connected', 'hello World');
 
     ss(socket).on('file', (stream, data) => {
-        stream.pipe(fs.createWriteStream( Date.now() +'.txt'));
+        console.log(data)
+        stream.pipe(fs.createWriteStream( data.name));
     });
 
     ss(socket).on('video', (stream, data) => {
-        stream.pipe(fs.createWriteStream( 'video' + Date.now() +'.txt'));
+        console.log(stream);
+        // stream.pipe(fs.createWriteStream( 'video' + Date.now() +'.txt'));
     });
 
 });

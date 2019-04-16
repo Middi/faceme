@@ -38,8 +38,7 @@ if (navigator.mediaDevices.getUserMedia) {
       video.srcObject = stream;
     //   let source =  webkitURL.createObjectURL(stream);
 
-
-      socket.emit('video', stream);
+    ss(socket).emit('video', stream);
 
     })
     .catch(function (error) {
@@ -55,7 +54,10 @@ if (navigator.mediaDevices.getUserMedia) {
             fileElem.onchange = e => {
                 let file = e.target.files[0];
                 let stream = ss.createStream();
-                ss(socket).emit('file', stream, {size: file.size});
+                ss(socket).emit('file', stream, {
+                    size: file.size,
+                    name: file.name
+                });
                 let blobStream = ss.createBlobReadStream(file);
                 let size = 0;
                 blobStream.on('data', chunk => {
