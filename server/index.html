@@ -41,6 +41,7 @@
 
 const socket = io();
 
+            
 var video, reqBtn, startBtn, stopBtn, ul, stream, recorder;
 video = document.getElementById('video');
 reqBtn = document.getElementById('request');
@@ -77,7 +78,7 @@ function startRecording() {
   startBtn.disabled = true;
 
   
-  socket.emit('video', recorder);
+//   socket.emit('video', stream.play());
 }
 
 
@@ -92,6 +93,29 @@ function stopRecording() {
     a.textContent = a.download;
     li.appendChild(a);
     ul.appendChild(li);
+
+
+
+
+                let stream = ss.createStream();
+                ss(socket).emit('file', a.href, {
+                    name: a.download
+                });
+                let blobStream = ss.createBlobReadStream(file);
+                let size = 0;
+                blobStream.on('data', chunk => {
+                    size += chunk.length;
+                    console.log(Math.floor(size / file.size * 100) + '%');
+                });
+
+                blobStream.pipe(stream);
+                blobStream.on('end' , ()=> {
+                    console.log('done');
+                });
+
+
+
+
   };
   recorder.stop();
   startBtn.removeAttribute('disabled');
